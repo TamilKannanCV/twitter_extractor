@@ -12,6 +12,9 @@ class TwitterExtractor {
   ///Returns whether the given url is a valid Twitter url
   static bool isValidUrl(String url) => LinkUtils.isValidUrl(url);
 
+  ///Returns username
+  static String getUsername(String url) => LinkUtils.getUsername(url);
+
   ///Returns [Twitter] data
   static Future<Twitter> extract(String url) async {
     final String? id = LinkUtils.getId(url);
