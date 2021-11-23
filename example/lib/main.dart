@@ -22,13 +22,26 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: TextButton(
-                onPressed: () async {
-                  final twitter = await TwitterExtractor.extract(
-                      "https://twitter.com/mspoweruser/status/1453107912314871810/photo/1");
-                      log(twitter.videos.first.url);
-                },
-                child: const Text("Click me!"))));
+        body: FutureBuilder(
+            future: TwitterExtractor.extract(
+                "https://twitter.com/mspoweruser/status/1453107912314871810/photo/1"),
+            builder: (context, AsyncSnapshot<Twitter> snapshot) {
+              if (snapshot.hasData) {
+                Twitter tweet = snapshot.data!;
+                return Center(
+                    child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      child: Image.network(tweet.videos.first.thumb),
+                    ),
+                    Text(tweet.videos.first.text),
+                  ],
+                ));
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }));
   }
 }
